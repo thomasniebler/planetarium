@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planetarium</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #000; color: #dfe6f0;
+      font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    canvas { display: block; }
+    .hud { position: fixed; pointer-events: none; text-shadow: 0 1px 3px #000; }
+    #top { top: 14px; left: 16px; }
+    #top h1 { margin: 0 0 2px; font-size: 15px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
+    #top .date { font-size: 22px; font-variant-numeric: tabular-nums; color: #fff; }
+    #top .sub { color: #9fb0c8; font-variant-numeric: tabular-nums; }
+    #info { bottom: 40px; left: 16px; min-width: 220px; }
+    #info h2 { margin: 0 0 4px; font-size: 20px; font-weight: 600; color: #fff; }
+    #info table { border-collapse: collapse; }
+    #info td { padding: 0 12px 0 0; font-variant-numeric: tabular-nums; }
+    #info td:first-child { color: #9fb0c8; }
+    #help { bottom: 12px; left: 16px; right: 16px; color: #7f8da3; font-size: 12px; }
+    #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+    .label { position: absolute; top: 0; left: 0; display: flex; align-items: center; gap: 5px; margin: -9px 0 0 -4px;
+      padding: 2px 6px 2px 0; color: #cfd8e6; font-size: 12px; white-space: nowrap; cursor: pointer;
+      pointer-events: auto; user-select: none; text-shadow: 0 1px 3px #000; will-change: transform; }
+    .label i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid rgba(255,255,255,.55); box-sizing: border-box; flex: none; }
+    .label.moon { font-size: 11px; color: #9fb0c8; }
+    .label.focus { color: #fff; font-weight: 600; }
+    .label:hover { color: #fff; }
+    #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #000; color: #9fb0c8;
+      font-size: 15px; letter-spacing: .08em; transition: opacity .6s; }
+    #loading.done { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div id="labels"></div>
+  <div id="top" class="hud">
+    <h1>Planetarium</h1>
+    <div class="date" id="date"></div>
+    <div class="sub" id="speed"></div>
+  </div>
+  <div id="info" class="hud"></div>
+  <div id="help" class="hud">drag: rotate · wheel: zoom · right-drag: pan · click a label: fly there · space: pause · , / . : slower / faster · R: reset</div>
+  <div id="loading">Painting planets…</div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
