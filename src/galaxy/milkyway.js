@@ -85,7 +85,7 @@ async function start() {
     spiralStrength: params.spiralStrength, spiralOmega: params.spiralOmega };
   P.update(pp);
   P.setTime(-WARM);
-  S = buildPopulations(P, QUALITY);
+  S = buildPopulations(P, QUALITY, 7, -WARM);
   posArr = new Float32Array(3 * S.n); valArr = new Float32Array(S.n);
   for (let i = 0; i < S.n; i++) {
     // physics -> scene axes
@@ -187,7 +187,7 @@ const labels = [
   { el: mkLabel('Sun', () => setFocus('Sun')), pos: () => tmpA.set(sun.pos[0], sun.pos[2], -sun.pos[1]) },
   { el: mkLabel('Sgr A* (central black hole)', () => setFocus('Galactic centre')), pos: () => tmpA.set(0, 0, 0) },
 ];
-const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), lastFocus = new THREE.Vector3();
 
 // --- camera focus --------------------------------------------------------------------------------
 let flyTo = null;
@@ -300,9 +300,12 @@ function frame(now) {
   } else if (ready) { lastPoolT = pool.t; realAcc = 0; }
 
   // camera follows the focus point
+  // follow the focus: while flying, glide towards it; afterwards only carry along its motion, so a
+  // user's pan offset (right-drag) is kept
   focusPoint(tmpA);
-  const k = flyTo !== null ? 1 - Math.exp(-5 * dtReal) : 1;
-  tmpB.subVectors(tmpA, controls.target).multiplyScalar(k);
+  if (flyTo !== null) tmpB.subVectors(tmpA, controls.target).multiplyScalar(1 - Math.exp(-5 * dtReal));
+  else tmpB.subVectors(tmpA, lastFocus);
+  lastFocus.copy(tmpA);
   controls.target.add(tmpB); camera.position.add(tmpB);
   if (flyTo !== null) {
     const off = tmpB.subVectors(camera.position, controls.target), d = off.length();
@@ -338,6 +341,6 @@ if (query.has('view')) { // ?view=top | edge
   const d = camera.position.length();
   camera.position.set(0, query.get('view') === 'top' ? d : 0.02 * d, query.get('view') === 'top' ? 0.001 : d);
 }
-window.__stats = () => ({ fps: meter.fps, n: S?.n, workers: pool?.workers.length, t: sun.t, effSpeed });
+window.__stats = () => ({ fps: meter.fps, n: S?.n, workers: pool?.workers.length, t: sun.t, effSpeed, target: controls.target.toArray() });
 start().then(() => { if (params.focus === 'Sun') setFocus('Sun'); });
 requestAnimationFrame(frame);

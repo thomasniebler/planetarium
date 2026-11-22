@@ -17,7 +17,7 @@ const LIFE = { [TYPE.YOUNG]: [25, 260], [TYPE.HII]: [6, 14], [TYPE.DUST]: [30, 7
 // Disk velocity dispersions (km/s) at the solar radius, scaled with exp(-(R - Rsun)/(2 Rd))
 const RD_THIN = 2.6, RD_THICK = 2.2;
 
-export function buildPopulations(P, quality = 1, seed = 7) {
+export function buildPopulations(P, quality = 1, seed = 7, t0 = 0) {
   const r = rng(seed);
   const order = ['THIN', 'THICK', 'BULGE', 'HALO', 'YOUNG', 'HII', 'DUST']; // DUST last: rendered separately
   const n = order.reduce((s, k) => s + Math.round(COUNTS[k] * quality), 0);
@@ -29,8 +29,8 @@ export function buildPopulations(P, quality = 1, seed = 7) {
     for (let c = 0; c < cnt; c++, i++) {
       type[i] = t; seedA[i] = r();
       if (SHORT_LIVED(t)) {
-        spawn(P, i, t, pos, vel, born, life, r, 0);
-        born[i] = -r() * life[i]; // already at a random age, so the galaxy starts in steady state
+        spawn(P, i, t, pos, vel, born, life, r, t0);
+        born[i] = t0 - r() * life[i]; // already at a random age (on the clock the simulation starts at)
       } else sampleOld(P, t, i, pos, vel, r);
     }
   }

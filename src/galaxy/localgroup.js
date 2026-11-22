@@ -171,7 +171,7 @@ function watchEvents() {
 
 // --- camera focus --------------------------------------------------------------------------------
 let flyTo = null;
-const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), lastFocus = new THREE.Vector3();
 function focusPoint(v) {
   const k = GALAXIES.findIndex((g) => g.name === params.focus);
   // 'Local Group': halfway between the two big galaxies (the barycentre sits much closer to Andromeda)
@@ -251,9 +251,12 @@ function frame(now) {
     if (realAcc > 0.5) { effSpeed = (pool.t - lastPoolT) / realAcc; lastPoolT = pool.t; realAcc = 0; }
   } else if (ready) { lastPoolT = pool.t; realAcc = 0; }
 
+  // follow the focus: while flying, glide towards it; afterwards only carry along its motion, so a
+  // user's pan offset (right-drag) is kept
   focusPoint(tmpA);
-  const k = flyTo !== null ? 1 - Math.exp(-4 * dtReal) : 1;
-  tmpB.subVectors(tmpA, controls.target).multiplyScalar(k);
+  if (flyTo !== null) tmpB.subVectors(tmpA, controls.target).multiplyScalar(1 - Math.exp(-4 * dtReal));
+  else tmpB.subVectors(tmpA, lastFocus);
+  lastFocus.copy(tmpA);
   controls.target.add(tmpB); camera.position.add(tmpB);
   if (flyTo !== null) {
     const off = tmpB.subVectors(camera.position, controls.target), dd = off.length();
