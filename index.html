@@ -13,6 +13,11 @@
     #top h1 { margin: 0 0 2px; font-size: 15px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
     #top .date { font-size: 22px; font-variant-numeric: tabular-nums; color: #fff; }
     #top .sub { color: #9fb0c8; font-variant-numeric: tabular-nums; }
+    nav.scenes { pointer-events: auto; margin: 6px 0 8px; display: flex; gap: 4px; flex-wrap: wrap; }
+    nav.scenes a { color: #9fb0c8; text-decoration: none; font-size: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,.18);
+      border-radius: 10px; background: rgba(0,0,0,.35); }
+    nav.scenes a:hover { color: #fff; border-color: rgba(255,255,255,.45); }
+    nav.scenes a[aria-current] { color: #000; background: #dfe6f0; border-color: #dfe6f0; }
     #info { bottom: 40px; left: 16px; min-width: 220px; }
     #info h2 { margin: 0 0 4px; font-size: 20px; font-weight: 600; color: #fff; }
     #info table { border-collapse: collapse; }
@@ -36,6 +41,7 @@
   <div id="labels"></div>
   <div id="top" class="hud">
     <h1>Planetarium</h1>
+    <nav class="scenes"><a href="index.html" aria-current="page">Solar system</a><a href="galaxy.html">Milky Way</a><a href="localgroup.html">Local Group</a></nav>
     <div class="date" id="date"></div>
     <div class="sub" id="speed"></div>
   </div>
