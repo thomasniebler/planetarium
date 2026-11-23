@@ -27,3 +27,11 @@ Things that would be fun (or useful) to add later. Nothing here is implemented y
 - Jump to date, real ephemerides at start instead of mean elements.
 - Camera that co-rotates with a planet / sits on a surface looking up.
 - Energy & angular momentum readout to show integrator health; save/share a scenario via URL.
+
+## Galaxies
+- Live (self-gravitating) N-body disk with a Barnes–Hut tree or on the GPU, so bars and spirals form on their own.
+- Seamless zoom from the solar system out to the Milky Way and the Local Group.
+- Dwarf galaxies (M32, NGC 205, Sagittarius dSph, Fornax…) as small satellites; the Magellanic Stream.
+- Live halos (particles instead of rigid spheres) for a more realistic merger remnant.
+- Run the Local Group backwards to its past (needs care: dynamical friction is not time-reversible).
+
